@@ -1,13 +1,15 @@
 public class FindInRotatedSortedArray {
     static int findInRotatedArray(int[] arr , int target){
+        if(arr.length<3) return -1;
         int pivot = findPivot(arr);
-        int firstBlock = binarySearch(arr,target,0,pivot,true);
-        if (firstBlock!=-1){
-            return firstBlock;
-
+        if(pivot==-1){
+            return binarySearch(arr,target,0,arr.length-1);
         }
-
-        return binarySearch(arr,target,pivot+1,arr.length-1,true);
+        if(arr[pivot]==target) return pivot;
+        if(target  >= arr[0]){
+            return binarySearch(arr,target,0,pivot-1);
+        }
+        return binarySearch(arr,target,pivot+1,arr.length-1);
     }
 
     static int findPivot(int[] arr){
@@ -32,32 +34,21 @@ public class FindInRotatedSortedArray {
                 end = mid -1 ;
             }
             else start = mid+1;
-
         }
         return -1;
 
     }
 
-    static int binarySearch(int[] arr, int target, int start, int end,boolean isAscending){
-        while(start<= end){
-            int mid = start + (end-start)/2;
-            if (arr[mid] == target) return mid;
-            if(isAscending){
+        static int binarySearch(int[] arr, int target, int start, int end){
+            while(start<= end){
+                int mid = start + (end-start)/2;
+                if (arr[mid] == target) return mid;
                 if(target > arr[mid] ){
-                    start=mid+1;
+                        start=mid+1;
                 } else if (target<arr[mid]) {
-                    end = mid-1;
+                    end = mid - 1;
                 }
             }
-            else{
-                if(target > arr[mid] ){
-                    end = mid-1;
-                } else if (target<arr[mid]) {
-                    start  = mid+1;
-
-                }
-            }
+            return -1;
         }
-        return -1;
-    }
 }
